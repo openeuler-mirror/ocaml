@@ -1,19 +1,13 @@
 Name:           ocaml
 Version:        4.07.0
-Release:        4
+Release:        5
 Summary:        OCaml compiler and programming environment
 License:        QPL and (LGPLv2+ with exceptions)
 URL:            http://www.ocaml.org
 Source0:        http://caml.inria.fr/pub/distrib/ocaml-4.07/ocaml-%{version}.tar.xz
 
-Patch0001:      0001-Don-t-add-rpaths-to-libraries.patch
 Patch0002:      0002-ocamlbyteinfo-ocamlplugininfo-Useful-utilities-from-.patch
 Patch0003:      0003-configure-Allow-user-defined-C-compiler-flags.patch
-Patch0004:      0004-Add-RISC-V-backend.patch
-Patch0005:      0005-Copyright-untabify.patch
-Patch0006:      0006-fix-caml_c_call-reload-caml_young_limit.patch
-Patch0007:      0007-Adapt-to-4.07.patch
-Patch0008:      0008-riscv-Emit-debug-info.patch
 
 BuildRequires:  gcc binutils-devel ncurses-devel gdbm-devel emacs gawk perl-interpreter
 BuildRequires:  util-linux libICE-devel libSM-devel libX11-devel libXaw-devel libXext-devel
@@ -68,10 +62,8 @@ Obsoletes: %{name}-docs
 %description help
 Help files for %{name}
 
-
 %prep
 %autosetup -n %{name}-%{version} -S git -p1
-
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" \
@@ -90,11 +82,9 @@ make -C emacs ocamltags
 includes="-nostdlib -I stdlib -I utils -I parsing -I typing -I bytecomp -I asmcomp -I driver -I otherlibs/unix -I otherlibs/str -I otherlibs/dynlink"
 boot/ocamlrun ./ocamlc $includes dynlinkaux.cmo ocamlbyteinfo.ml -o ocamlbyteinfo
 
-
 %check
 cd testsuite
 make -j1 all
-
 
 %install
 make install \
@@ -112,7 +102,7 @@ perl -pi -e "s|^%{buildroot}||" %{buildroot}%{_libdir}/ocaml/ld.conf
     make install-ocamltags BINDIR=%{buildroot}%{_bindir}
 )
 
-echo %{version} > %{buildroot}%{_libdir}/ocaml/fedora-ocaml-release
+echo %{version} > %{buildroot}%{_libdir}/ocaml/openEuler-ocaml-release
 
 chrpath --delete %{buildroot}%{_libdir}/ocaml/stublibs/*.so
 
@@ -120,7 +110,6 @@ install -m 0755 ocamlbyteinfo %{buildroot}%{_bindir}
 
 find %{buildroot} -name .ignore -delete
 find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
-
 
 %files
 %license LICENSE
@@ -210,7 +199,7 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %dir %{_libdir}/ocaml/threads
 %{_libdir}/ocaml/threads/*.cmi
 %{_libdir}/ocaml/threads/*.cma
-%{_libdir}/ocaml/fedora-ocaml-release
+%{_libdir}/ocaml/openEuler-ocaml-release
 
 #x11
 %{_libdir}/ocaml/graphicsX11.cmi
@@ -225,7 +214,6 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %doc emacs/README
 %{_datadir}/emacs/site-lisp/*
 %{_bindir}/ocamltags
-
 
 %files devel
 # source
@@ -249,6 +237,9 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %{_mandir}/man3/*
 
 %changelog
+* Mon Jan 13 2020 openEuler Buildteam <buildteam@openeuler.org> - 4.07.0-5
+- update software package
+
 * Thu Dec 012 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-4
 - Add requires_opts and provides_opts
 

@@ -1,6 +1,6 @@
 Name:           ocaml
 Version:        4.07.0
-Release:        5
+Release:        6 
 Summary:        OCaml compiler and programming environment
 License:        QPL and (LGPLv2+ with exceptions)
 URL:            http://www.ocaml.org
@@ -63,7 +63,7 @@ Obsoletes: %{name}-docs
 Help files for %{name}
 
 %prep
-%autosetup -n %{name}-%{version} -S git -p1
+%autosetup -n %{name}-%{version} -p1
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" \
@@ -237,6 +237,9 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %{_mandir}/man3/*
 
 %changelog
+* Thu Jan 22 2020 yanzhihua <yanzhihua4@huawei.com> - 4.07.0-6
+- modify patching method
+
 * Mon Jan 13 2020 openEuler Buildteam <buildteam@openeuler.org> - 4.07.0-5
 - update software package
 

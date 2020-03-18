@@ -1,0 +1,25 @@
+From 77bbe25994a890408ec48969854d9f038a3e25cc Mon Sep 17 00:00:00 2001
+From: liangdong <liangdong10@huawei.com>
+Date: Wed, 18 Mar 2020 12:11:15 +0800
+Subject: [PATCH] add fstack-protector-strong
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 1316b3c..4b1782a 100755
+--- a/configure
++++ b/configure
+@@ -474,7 +474,7 @@ case "$ccfamily" in
+ -fno-builtin-memcmp";
+     internal_cflags="$gcc_warnings";;
+   gcc-*)
+-    common_cflags="-O2 -fno-strict-aliasing -fwrapv";
++    common_cflags="-O2 -fno-strict-aliasing -fwrapv -fstack-protector-strong";
+     internal_cflags="$gcc_warnings";;
+   *)
+     common_cflags="-O";;
+-- 
+2.19.1
+

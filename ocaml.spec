@@ -1,6 +1,6 @@
 Name:           ocaml
 Version:        4.07.0
-Release:        6 
+Release:        7
 Summary:        OCaml compiler and programming environment
 License:        QPL and (LGPLv2+ with exceptions)
 URL:            http://www.ocaml.org
@@ -13,7 +13,7 @@ BuildRequires:  gcc binutils-devel ncurses-devel gdbm-devel emacs gawk perl-inte
 BuildRequires:  util-linux libICE-devel libSM-devel libX11-devel libXaw-devel libXext-devel
 BuildRequires:  libXft-devel libXmu-devel libXrender-devel libXt-devel chrpath
 
-Requires:       gcc util-linux libX11-devel emacs(bin)
+Requires:       gcc util-linux libX11-devel emacs(bin) ocaml-help
 
 Provides:       bundled(md5-plumb) ocaml(runtime) = %{version}
 Provides:       ocaml(compiler) = %{version}
@@ -237,6 +237,9 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %{_mandir}/man3/*
 
 %changelog
+* Fri Nov 6 2020 jialei <jialei17@huawei.com> - 4.07.0-7
+- add help for Requires
+
 * Thu Jan 22 2020 yanzhihua <yanzhihua4@huawei.com> - 4.07.0-6
 - modify patching method
 

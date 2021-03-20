@@ -1,0 +1,25 @@
+From 6dd26df181bcef6044c3adab9762c50595ae6418 Mon Sep 17 00:00:00 2001
+From: wangxiao65 <287608437@qq.com>
+Date: Sat, 20 Mar 2021 17:16:39 +0800
+Subject: [PATCH] add fstack-protector-strong cflags
+
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure b/configure
+index 53f45f8..4dec03e 100755
+--- a/configure
++++ b/configure
+@@ -474,7 +474,7 @@ case "$ccfamily" in
+ -fno-builtin-memcmp";
+     internal_cflags="$gcc_warnings";;
+   gcc-*)
+-    common_cflags="-O2 -fno-strict-aliasing -fwrapv";
++    common_cflags="-O2 -fno-strict-aliasing -fwrapv -fstack-protector-strong";
+     internal_cflags="$gcc_warnings";;
+   *)
+     common_cflags="-O";;
+-- 
+2.23.0
+

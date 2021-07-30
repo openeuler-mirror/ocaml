@@ -1,13 +1,14 @@
 Name:           ocaml
 Version:        4.07.0
-Release:        6 
+Release:        7
 Summary:        OCaml compiler and programming environment
-License:        QPL and (LGPLv2+ with exceptions)
+License:        GPL-2.0-or-later and LGPL-2.1-only
 URL:            http://www.ocaml.org
 Source0:        http://caml.inria.fr/pub/distrib/ocaml-4.07/ocaml-%{version}.tar.xz
 
 Patch0002:      0002-ocamlbyteinfo-ocamlplugininfo-Useful-utilities-from-.patch
 Patch0003:      0003-configure-Allow-user-defined-C-compiler-flags.patch
+Patch0004:      compile-with-fcommon-to-support-gcc-10.patch
 
 BuildRequires:  gcc binutils-devel ncurses-devel gdbm-devel emacs gawk perl-interpreter
 BuildRequires:  util-linux libICE-devel libSM-devel libX11-devel libXaw-devel libXext-devel
@@ -237,6 +238,9 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %{_mandir}/man3/*
 
 %changelog
+* Fri 30 Jul 2021 sunguoshuai <sunguoshuai@huawei.com> -  4.07.0-7
+- compile with -fcommon to support gcc 10
+
 * Thu Jan 22 2020 yanzhihua <yanzhihua4@huawei.com> - 4.07.0-6
 - modify patching method
 

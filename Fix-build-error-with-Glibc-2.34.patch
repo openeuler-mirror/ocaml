@@ -1,0 +1,71 @@
+From a55bbf15dd5fba2926012383758cbf7fb8414cba Mon Sep 17 00:00:00 2001
+From: lingsheng <lingsheng@huawei.com>
+Date: Wed, 11 Aug 2021 11:14:11 +0800
+Subject: [PATCH] Fix build error with Glibc 2.34
+
+---
+ asmrun/signals_asm.c   | 23 ++++++++++++++++-------
+ byterun/caml/signals.h |  1 +
+ 2 files changed, 17 insertions(+), 7 deletions(-)
+
+diff --git a/asmrun/signals_asm.c b/asmrun/signals_asm.c
+index 3895d75..bc911da 100644
+--- a/asmrun/signals_asm.c
++++ b/asmrun/signals_asm.c
+@@ -182,7 +182,6 @@ DECLARE_SIGNAL_HANDLER(trap_handler)
+ #ifdef HAS_STACK_OVERFLOW_DETECTION
+ 
+ static char * system_stack_top;
+-static char sig_alt_stack[SIGSTKSZ];
+ 
+ #if defined(SYS_linux)
+ /* PR#4746: recent Linux kernels with support for stack randomization
+@@ -272,17 +271,27 @@ void caml_init_signals(void)
+ 
+   /* Stack overflow handling */
+ #ifdef HAS_STACK_OVERFLOW_DETECTION
+-  {
+-    stack_t stk;
++  if (caml_setup_stack_overflow_detection() != -1) {
+     struct sigaction act;
+-    stk.ss_sp = sig_alt_stack;
+-    stk.ss_size = SIGSTKSZ;
+-    stk.ss_flags = 0;
+     SET_SIGACT(act, segv_handler);
+     act.sa_flags |= SA_ONSTACK | SA_NODEFER;
+     sigemptyset(&act.sa_mask);
+     system_stack_top = (char *) &act;
+-    if (sigaltstack(&stk, NULL) == 0) { sigaction(SIGSEGV, &act, NULL); }
++    sigaction(SIGSEGV, &act, NULL);
+   }
+ #endif
+ }
++
++int caml_setup_stack_overflow_detection(void)
++{
++#ifdef HAS_STACK_OVERFLOW_DETECTION
++  stack_t stk;
++  stk.ss_sp = malloc(SIGSTKSZ);
++  if (stk.ss_sp == NULL) return -1;
++  stk.ss_size = SIGSTKSZ;
++  stk.ss_flags = 0;
++  return sigaltstack(&stk, NULL);
++#else
++  return 0;
++#endif
++}
+diff --git a/byterun/caml/signals.h b/byterun/caml/signals.h
+index 99924e4..33fba31 100644
+--- a/byterun/caml/signals.h
++++ b/byterun/caml/signals.h
+@@ -42,6 +42,7 @@ void caml_record_signal(int signal_number);
+ void caml_process_pending_signals(void);
+ void caml_process_event(void);
+ int caml_set_signal_action(int signo, int action);
++int caml_setup_stack_overflow_detection(void);
+ 
+ CAMLextern void (*caml_enter_blocking_section_hook)(void);
+ CAMLextern void (*caml_leave_blocking_section_hook)(void);
+-- 
+2.23.0
+

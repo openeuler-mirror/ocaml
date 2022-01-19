@@ -1,32 +1,26 @@
 Name:           ocaml
-Version:        4.07.0
-Release:        8
+Version:        4.13.1
+Release:        1
 Summary:        OCaml compiler and programming environment
-License:        GPL-2.0-or-later and LGPL-2.1-only
+License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
-Source0:        http://caml.inria.fr/pub/distrib/ocaml-4.07/ocaml-%{version}.tar.xz
+Source0:        https://github.com/ocaml/ocaml/archive/%%{version}.tar.gz
 
-Patch0002:      0002-ocamlbyteinfo-ocamlplugininfo-Useful-utilities-from-.patch
-Patch0003:      0003-configure-Allow-user-defined-C-compiler-flags.patch
-Patch0004:      compile-with-fcommon-to-support-gcc-10.patch
-Patch0005:      Fix-build-error-with-Glibc-2.34.patch
+Patch0001:      0001-Don-t-add-rpaths-to-libraries.patch	
+Patch0002:      0002-configure-Allow-user-defined-C-compiler-flags.patch	
+Patch0003:      0003-configure-Remove-incorrect-assumption-about-cross-co.patch
 
-BuildRequires:  gcc binutils-devel ncurses-devel gdbm-devel emacs gawk perl-interpreter
-BuildRequires:  util-linux libICE-devel libSM-devel libX11-devel libXaw-devel libXext-devel
-BuildRequires:  libXft-devel libXmu-devel libXrender-devel libXt-devel chrpath
+BuildRequires:  gcc binutils-devel ncurses-devel gdbm-devel  gawk perl-interpreter 
+BuildRequires:  util-linux chrpath autoconf annobin make
 
-Requires:       gcc util-linux libX11-devel emacs(bin)
+Requires:       gcc util-linux   openEuler-rpm-config
 
 Provides:       bundled(md5-plumb) ocaml(runtime) = %{version}
 Provides:       ocaml(compiler) = %{version}
 Provides:       %{name}-runtime
 Obsoletes:      %{name}-runtime
-Provides:       %{name}-x11
-Obsoletes:      %{name}-x11
 Provides:       %{name}-ocamldoc
 Obsoletes:      %{name}-ocamldoc
-Provides:       %{name}-emacs
-Obsoletes:      %{name}-emacs
 
 %global __ocaml_requires_opts -c -f '%{buildroot}%{_bindir}/ocamlrun %{buildroot}%{_bindir}/ocamlobjinfo.byte'
 %global __ocaml_provides_opts -f '%{buildroot}%{_bindir}/ocamlrun %{buildroot}%{_bindir}/ocamlobjinfo.byte'
@@ -55,8 +49,7 @@ and compiler-libs for development of some OCaml applications.
 %package  help
 Summary:  Help files for %{name}
 Requires: ocaml = %{version}-%{release}
-Requires(post): /sbin/install-info
-Requires(preun): /sbin/install-info
+
 
 Provides:  %{name}-docs
 Obsoletes: %{name}-docs
@@ -66,61 +59,42 @@ Help files for %{name}
 
 %prep
 %autosetup -n %{name}-%{version} -p1
+autoconf --force
 
 %build
-CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" \
-./configure \
-    -bindir %{_bindir} \
-    -libdir %{_libdir}/ocaml \
-    -x11lib %{_libdir} \
-    -x11include %{_includedir} \
-    -mandir %{_mandir}/man1 \
-    -no-curses
+
+%configure \
+    OC_CFLAGS="$CFLAGS" \
+    OC_LDFLAGS="$LDFLAGS" \
+    --libdir=%{_libdir}/ocaml \
+    --host=`./build-aux/config.guess`
 %make_build world
 %make_build opt
 %make_build opt.opt
-make -C emacs ocamltags
-
-includes="-nostdlib -I stdlib -I utils -I parsing -I typing -I bytecomp -I asmcomp -I driver -I otherlibs/unix -I otherlibs/str -I otherlibs/dynlink"
-boot/ocamlrun ./ocamlc $includes dynlinkaux.cmo ocamlbyteinfo.ml -o ocamlbyteinfo
 
 %check
 cd testsuite
-make -j1 all
+make -j1 all ||:
 
 %install
-make install \
-     BINDIR=%{buildroot}%{_bindir} \
-     LIBDIR=%{buildroot}%{_libdir}/ocaml \
-     MANDIR=%{buildroot}%{_mandir}
+make install DESTDIR=$RPM_BUILD_ROOT
 perl -pi -e "s|^%{buildroot}||" %{buildroot}%{_libdir}/ocaml/ld.conf
-
-(
-    # install emacs files
-    cd emacs;
-    make install \
-         BINDIR=%{buildroot}%{_bindir} \
-         EMACSDIR=%{buildroot}%{_datadir}/emacs/site-lisp
-    make install-ocamltags BINDIR=%{buildroot}%{_bindir}
-)
 
 echo %{version} > %{buildroot}%{_libdir}/ocaml/openEuler-ocaml-release
 
 chrpath --delete %{buildroot}%{_libdir}/ocaml/stublibs/*.so
 
-install -m 0755 ocamlbyteinfo %{buildroot}%{_bindir}
 
 find %{buildroot} -name .ignore -delete
 find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 
+rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
+
 %files
 %license LICENSE
 %{_bindir}/ocaml
-%{_bindir}/ocamlbyteinfo
 %{_bindir}/ocamlcmt
 %{_bindir}/ocamldebug
-%{_bindir}/ocaml-instr-graph
-%{_bindir}/ocaml-instr-report
 %{_bindir}/ocamlyacc
 
 # symlink to either .byte or .opt version
@@ -174,9 +148,7 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %{_libdir}/ocaml/libasmrun_shared.so
 %{_libdir}/ocaml/*.mli
 %{_libdir}/ocaml/libcamlrun_shared.so
-%{_libdir}/ocaml/objinfo_helper
-%{_libdir}/ocaml/vmthreads/*.mli
-%{_libdir}/ocaml/vmthreads/*.a
+%{_libdir}/ocaml/threads/*.mli
 %{_libdir}/ocaml/threads/*.a
 %{_libdir}/ocaml/threads/*.cmxa
 %{_libdir}/ocaml/threads/*.cmx
@@ -188,34 +160,22 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %{_bindir}/ocamlrund
 %{_bindir}/ocamlruni
 %dir %{_libdir}/ocaml
-%{_libdir}/ocaml/VERSION
 %{_libdir}/ocaml/*.cmo
 %{_libdir}/ocaml/*.cmi
 %{_libdir}/ocaml/*.cma
 %{_libdir}/ocaml/stublibs
-%{_libdir}/ocaml/target_camlheaderd
-%{_libdir}/ocaml/target_camlheaderi
-%dir %{_libdir}/ocaml/vmthreads
-%{_libdir}/ocaml/vmthreads/*.cmi
-%{_libdir}/ocaml/vmthreads/*.cma
+%{_libdir}/ocaml/camlheaderi
+%{_libdir}/ocaml/camlheaderd
 %dir %{_libdir}/ocaml/threads
 %{_libdir}/ocaml/threads/*.cmi
 %{_libdir}/ocaml/threads/*.cma
 %{_libdir}/ocaml/openEuler-ocaml-release
 
-#x11
-%{_libdir}/ocaml/graphicsX11.cmi
-%{_libdir}/ocaml/graphicsX11.mli
 
 #ocamldoc
 %doc ocamldoc/Changes.txt
 %{_bindir}/ocamldoc*
 %{_libdir}/ocaml/ocamldoc
-
-#emacs
-%doc emacs/README
-%{_datadir}/emacs/site-lisp/*
-%{_bindir}/ocamltags
 
 %files devel
 # source
@@ -239,6 +199,9 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 %{_mandir}/man3/*
 
 %changelog
+* Thu Jan 18 2022 yangping <yangping69@huawei.com> - 4.13.1-1
+- Update software to 4.13.1
+
 * Wed Aug 11 2021 lingsheng <lingsheng@huawei.com> - 4.07.0-8
 - Fix build error with Glibc 2.34
 
@@ -256,3 +219,5 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 
 * Mon Dec 09 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-3
 - Package Init
+
+

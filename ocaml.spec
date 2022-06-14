@@ -199,7 +199,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
-* Thu Jan 18 2022 yangping <yangping69@huawei.com> - 4.13.1-1
+* Tue Jan 18 2022 yangping <yangping69@huawei.com> - 4.13.1-1
 - Update software to 4.13.1
 
 * Wed Aug 11 2021 lingsheng <lingsheng@huawei.com> - 4.07.0-8

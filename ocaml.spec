@@ -1,10 +1,10 @@
 Name:           ocaml
 Version:        4.13.1
-Release:        1
+Release:        2
 Summary:        OCaml compiler and programming environment
 License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
-Source0:        https://github.com/ocaml/ocaml/archive/%%{version}.tar.gz
+Source0:        https://github.com/ocaml/ocaml/archive/%{version}.tar.gz
 
 Patch0001:      0001-Don-t-add-rpaths-to-libraries.patch	
 Patch0002:      0002-configure-Allow-user-defined-C-compiler-flags.patch	
@@ -199,6 +199,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
+* Wed Nov 9 2022 liyanan <liyanan32@h-partners.com>  - 4.13.1-2
+- Change source
+
 * Tue Jan 18 2022 yangping <yangping69@huawei.com> - 4.13.1-1
 - Update software to 4.13.1
 

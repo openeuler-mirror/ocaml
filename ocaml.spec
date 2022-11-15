@@ -1,6 +1,19 @@
+%ifnarch loongarch64
+%global native_compiler 1
+%else
+%global native_compiler 0
+%endif
+
+%ifnarch loongarch64
+%global natdynlink 1
+%else
+%global natdynlink 0
+%endif
+
+
 Name:           ocaml
 Version:        4.13.1
-Release:        1
+Release:        2
 Summary:        OCaml compiler and programming environment
 License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
@@ -61,6 +74,12 @@ Help files for %{name}
 %autosetup -n %{name}-%{version} -p1
 autoconf --force
 
+# add for loongarch64
+%ifarch loongarch64
+%_update_config_guess
+%_update_config_sub
+%endif
+
 %build
 
 %configure \
@@ -69,8 +88,10 @@ autoconf --force
     --libdir=%{_libdir}/ocaml \
     --host=`./build-aux/config.guess`
 %make_build world
+%if %{native_compiler}
 %make_build opt
 %make_build opt.opt
+%endif
 
 %check
 cd testsuite
@@ -119,6 +140,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_bindir}/ocamloptp.byte
 %{_bindir}/ocamlprof.byte
 
+%if %{native_compiler}
 # native code versions
 %{_bindir}/ocamlc.opt
 %{_bindir}/ocamlcp.opt
@@ -133,6 +155,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_bindir}/ocamlopt
 %{_bindir}/ocamlopt.byte
 %{_bindir}/ocamlopt.opt
+%endif
 
 %{_libdir}/ocaml/camlheader
 %{_libdir}/ocaml/camlheader_ur
@@ -141,17 +164,26 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_libdir}/ocaml/ld.conf
 %{_libdir}/ocaml/Makefile.config
 %{_libdir}/ocaml/*.a
+%if %{natdynlink}
 %{_libdir}/ocaml/*.cmxs
+%endif
+
+%if %{native_compiler}
 %{_libdir}/ocaml/*.cmxa
 %{_libdir}/ocaml/*.cmx
 %{_libdir}/ocaml/*.o
 %{_libdir}/ocaml/libasmrun_shared.so
+%endif
+
 %{_libdir}/ocaml/*.mli
 %{_libdir}/ocaml/libcamlrun_shared.so
 %{_libdir}/ocaml/threads/*.mli
+
+%if %{native_compiler}
 %{_libdir}/ocaml/threads/*.a
 %{_libdir}/ocaml/threads/*.cmxa
 %{_libdir}/ocaml/threads/*.cmx
+%endif
 %{_libdir}/ocaml/caml
 
 #runtime
@@ -188,10 +220,13 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_libdir}/ocaml/compiler-libs/*.cmi
 %{_libdir}/ocaml/compiler-libs/*.cmo
 %{_libdir}/ocaml/compiler-libs/*.cma
+
+%if %{native_compiler}
 %{_libdir}/ocaml/compiler-libs/*.a
 %{_libdir}/ocaml/compiler-libs/*.cmxa
 %{_libdir}/ocaml/compiler-libs/*.cmx
 %{_libdir}/ocaml/compiler-libs/*.o
+%endif
 
 
 %files help
@@ -199,6 +234,10 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
+* Mon Nov 14 2022 zhaozhen <zhaozhen@loongson.cn> - 4.13.1-2
+- update config.guess and config.sub
+- loongarch64 does not support native_compiler 
+
 * Thu Jan 18 2022 yangping <yangping69@huawei.com> - 4.13.1-1
 - Update software to 4.13.1
 

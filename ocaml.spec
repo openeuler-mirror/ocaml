@@ -1,6 +1,6 @@
 Name:           ocaml
 Version:        4.13.1
-Release:        2
+Release:        3
 Summary:        OCaml compiler and programming environment
 License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
@@ -13,7 +13,7 @@ Patch0003:      0003-configure-Remove-incorrect-assumption-about-cross-co.patch
 BuildRequires:  gcc binutils-devel ncurses-devel gdbm-devel  gawk perl-interpreter 
 BuildRequires:  util-linux chrpath autoconf annobin make
 
-Requires:       gcc util-linux   openEuler-rpm-config
+Requires:       gcc util-linux   %{_vendor}-rpm-config
 
 Provides:       bundled(md5-plumb) ocaml(runtime) = %{version}
 Provides:       ocaml(compiler) = %{version}
@@ -80,7 +80,7 @@ make -j1 all ||:
 make install DESTDIR=$RPM_BUILD_ROOT
 perl -pi -e "s|^%{buildroot}||" %{buildroot}%{_libdir}/ocaml/ld.conf
 
-echo %{version} > %{buildroot}%{_libdir}/ocaml/openEuler-ocaml-release
+echo %{version} > %{buildroot}%{_libdir}/ocaml/%{_vendor}-ocaml-release
 
 chrpath --delete %{buildroot}%{_libdir}/ocaml/stublibs/*.so
 
@@ -169,7 +169,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %dir %{_libdir}/ocaml/threads
 %{_libdir}/ocaml/threads/*.cmi
 %{_libdir}/ocaml/threads/*.cma
-%{_libdir}/ocaml/openEuler-ocaml-release
+%{_libdir}/ocaml/%{_vendor}-ocaml-release
 
 
 #ocamldoc
@@ -199,6 +199,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
+* Thu Nov 17 2022 wulei <wulei80@h-partners.com> - 4.13.1-3
+- Replace openEuler with %{_vendor}
+
 * Wed Nov 9 2022 liyanan <liyanan32@h-partners.com>  - 4.13.1-2
 - Change source
 

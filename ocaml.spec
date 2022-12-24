@@ -220,7 +220,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 * Mon Jan 13 2020 openEuler Buildteam <buildteam@openeuler.org> - 4.07.0-5
 - update software package
 
-* Thu Dec 012 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-4
+* Thu Dec 12 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-4
 - Add requires_opts and provides_opts
 
 * Mon Dec 09 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-3

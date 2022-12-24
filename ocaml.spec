@@ -13,7 +13,7 @@
 
 Name:           ocaml
 Version:        4.13.1
-Release:        2
+Release:        3
 Summary:        OCaml compiler and programming environment
 License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
@@ -234,6 +234,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
+* Sat Dec 24 2022 Wei Chen <chenwei@xfuson.com> - 4.13.1-3
+- fix bogus date in changelog
+
 * Mon Nov 14 2022 zhaozhen <zhaozhen@loongson.cn> - 4.13.1-2
 - loongarch64 does not support native_compiler
 
@@ -252,7 +255,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 * Mon Jan 13 2020 openEuler Buildteam <buildteam@openeuler.org> - 4.07.0-5
 - update software package
 
-* Thu Dec 012 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-4
+* Thu Dec 12 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-4
 - Add requires_opts and provides_opts
 
 * Mon Dec 09 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-3

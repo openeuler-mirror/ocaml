@@ -2,7 +2,7 @@ Name:           ocaml
 Version:        4.07.0
 Release:        7
 Summary:        OCaml compiler and programming environment
-License:        QPL and (LGPLv2+ with exceptions)
+License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
 Source0:        http://caml.inria.fr/pub/distrib/ocaml-4.07/ocaml-%{version}.tar.xz
 
@@ -246,7 +246,7 @@ find %{buildroot} \( -name '*.cmt' -o -name '*.cmti' \) -a -delete
 * Mon Jan 13 2020 openEuler Buildteam <buildteam@openeuler.org> - 4.07.0-5
 - update software package
 
-* Thu Dec 012 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-4
+* Thu Dec 12 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-4
 - Add requires_opts and provides_opts
 
 * Mon Dec 09 2019 openEuler BuildTeam<buildteam@openeuler.org> - 4.07.0-3

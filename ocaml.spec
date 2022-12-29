@@ -234,7 +234,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
-* Sat Dec 24 2022 Wei Chen <chenwei@xfuson.com> - 4.13.1-3
+* Sat Dec 24 2022 Wei Chen <chenwei@xfusion.com> - 4.13.1-3
 - fix bogus date in changelog
 
 * Mon Nov 14 2022 zhaozhen <zhaozhen@loongson.cn> - 4.13.1-2

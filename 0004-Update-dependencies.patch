@@ -1,0 +1,32 @@
+From 7087674e08f7331bedeccbd074620b5ca08c9013 Mon Sep 17 00:00:00 2001
+From: Nicolas Chataing <nicolas.chataing@gmail.com>
+Date: Mon, 5 Jul 2021 12:10:18 +0200
+Subject: [PATCH] Update dependencies
+
+---
+ ocamldoc/.depend | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/ocamldoc/.depend b/ocamldoc/.depend
+index 6b3deab14..6dcb177b9 100644
+--- a/ocamldoc/.depend
++++ b/ocamldoc/.depend
+@@ -125,6 +125,7 @@ odoc_ast.cmo : \
+     odoc_class.cmo \
+     ../parsing/location.cmi \
+     ../typing/ident.cmi \
++    ../typing/btype.cmi \
+     ../parsing/asttypes.cmi \
+     odoc_ast.cmi
+ odoc_ast.cmx : \
+@@ -147,6 +148,7 @@ odoc_ast.cmx : \
+     odoc_class.cmx \
+     ../parsing/location.cmx \
+     ../typing/ident.cmx \
++    ../typing/btype.cmx \
+     ../parsing/asttypes.cmi \
+     odoc_ast.cmi
+ odoc_ast.cmi : \
+-- 
+2.39.0.windows.2
+

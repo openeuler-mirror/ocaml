@@ -1,6 +1,6 @@
 Name:           ocaml
 Version:        4.13.1
-Release:        5
+Release:        6
 Summary:        OCaml compiler and programming environment
 License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
@@ -11,6 +11,7 @@ Patch0002:      0002-configure-Allow-user-defined-C-compiler-flags.patch
 Patch0003:      0003-configure-Remove-incorrect-assumption-about-cross-co.patch
 Patch0004:      0004-Update-dependencies.patch
 Patch0005:      0005-Bug-fix-equal_private-was-being-used-in-too-many-pla.patch
+Patch0006:      0006-asmcomp-dune-fix-build-on-RISC-V.patch
 
 BuildRequires:  gcc binutils-devel ncurses-devel gdbm-devel  gawk perl-interpreter 
 BuildRequires:  util-linux chrpath autoconf annobin make
@@ -201,6 +202,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
+* Thu Jan 18 2023 xingxing <xingxing@xfusion.com> - 4.13.1-6
+- fix build on RISC-V 
+
 * Tue Jan 18 2023 xingxing<xingxing@xfusion.com> - 4.13.1-5
 - Bug fix equal private was being used in too many pla
 

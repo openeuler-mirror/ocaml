@@ -1,10 +1,10 @@
-%ifnarch loongarch64
+%ifnarch loongarch64 riscv64
 %global native_compiler 1
 %else
 %global native_compiler 0
 %endif
 
-%ifnarch loongarch64
+%ifnarch loongarch64 riscv64
 %global natdynlink 1
 %else
 %global natdynlink 0
@@ -13,7 +13,7 @@
 
 Name:           ocaml
 Version:        4.13.1
-Release:        4
+Release:        5
 Summary:        OCaml compiler and programming environment
 License:        LGPL-2.1-only
 URL:            http://www.ocaml.org
@@ -75,8 +75,8 @@ Help files for %{name}
 %autosetup -n %{name}-%{version} -p1
 autoconf --force
 
-# add for loongarch64
-%ifarch loongarch64
+# add for loongarch64 riscv64
+%ifarch loongarch64 riscv64
 %_update_config_guess
 %_update_config_sub
 %endif
@@ -235,6 +235,9 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/eventlog_metadata
 %{_mandir}/man3/*
 
 %changelog
+* Wed Jul 19 2023 yoo <sunyuechi@iscas.ac.cn> - 4.13.1-5
+- add riscv support
+
 * Thu Jan 19 2023 xingxing<xingxing@xfusion.com> - 4.13.1-4
 - Update dependencies
 
